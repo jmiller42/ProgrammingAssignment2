@@ -1,15 +1,34 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Functions to cache information about a matrix and return its inverse quickly and efficiently. 
 
-## Write a short comment describing this function
+## meanCacheMatrix creates a list of functions related to a square, invertible matrix x. This caches the matrix so that
+## the inverse can be easily calculated and stored. 
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  inv <- NULL
+  set <- function(y) {
+    x <<- y
+    inv <<- NULL
+  }
+  get <- function() x
+  setinv <- function(solve) inv <<- solve
+  getinv <- function() inv
+  list(set = set, get = get,
+       setinv = setinv,
+       getinv = getinv)
 }
 
 
-## Write a short comment describing this function
+## cacheSolve returns a matrix that is the inverse of x., taking as its input the cache created by
+## makeCacheMatrix
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  inv <- x$getinv()
+  if(!is.null(inv)) {
+    message("getting cached data")
+    return(inv)
+  }
+  data <- x$get()
+  inv <-  solve(data, ...)
+  x$setinv(inv)
+  inv
 }
